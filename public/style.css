@@ -1,0 +1,30 @@
+* { 
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+}
+
+a, button {
+  width: 200px;
+}
+
+.cardContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+}
+
+.card { 
+  padding: 12px;
+}
+
+.btnContainer {
+  display: flex;
+  gap: 8px;
+}
