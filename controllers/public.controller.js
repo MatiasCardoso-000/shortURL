@@ -45,15 +45,15 @@ export const findById = async (req, res) => {
 };
 
 export const updateOneById = async (req, res) => {
+  const { uid } = req.params;
+  const { origin } = req.body;
   try {
-    const { uid } = req.params;
+    await UrlModel.updateOneById(uid, origin);
 
-    const updatedUrl = await UrlModel.updateOneById(uid);
-    console.log(updatedUrl);
-    
-    res.json(updatedUrl);
-    res.redirect('/')
+    res.redirect("/");
   } catch (error) {
+    console.log(error);
+
     res.status(400).json({ error: error.message });
   }
 };
@@ -64,6 +64,19 @@ export const deleteById = async (req, res) => {
   try {
     await UrlModel.deleteById(uid);
     console.log(`url deleted ${uid}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const redirectTo = async (req, res) => {
+  const { shortURL } = req.params;
+  
+  try {
+    const url = await UrlModel.findOne(shortURL);
+    console.log(url);
+    
+    res.redirect(url.origin);
   } catch (error) {
     console.log(error);
   }

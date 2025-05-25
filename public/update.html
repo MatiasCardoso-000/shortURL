@@ -38,10 +38,6 @@
       const form = document.querySelector(".form");
       const input = document.querySelector("input");
 
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-      });
-
       axios
         .get(`http://localhost:6003/urls/${uid}`)
         .then((data) => {
@@ -54,8 +50,24 @@
           console.log(e);
         });
 
-      editBtn.addEventListener("click", () => {
-        axios.put(`http://localhost:6003/urls/${uid}`);
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        try {
+          const newUrl = input.value.trim();
+          const numberId = parseInt(uid);
+          const response = await axios.put(
+            `http://localhost:6003/urls/${numberId}`,
+            { origin: newUrl }
+          );
+
+          if (response.status === 200) {
+            window.location.href = "/";
+          } else {
+            console.error("Error updating URL");
+          }
+        } catch (error) {
+          console.error("Error updating URL:", error);
+        }
       });
     </script>
   </body>

@@ -15,11 +15,7 @@
   <body>
     <main class="container">
       <h1>Home</h1>
-      <form
-        action="http://localhost:6003/urls"
-        method="POST"
-        class="text-center"
-      >
+      <form action="http://localhost:6003/urls" class="text-center" method="POST">
         <input
           type="text"
           name="origin"
@@ -46,8 +42,6 @@
       axios
         .get("http://localhost:6003/urls")
         .then((data) => {
-          console.log(data);
-
           for (let i = 0; i < data.data.length; i++) {
             const { url, shorturl, uid } = data.data[i];
             const urlCard = document.createElement("li");
@@ -77,13 +71,21 @@
             const copyBtn = document.createElement("button");
             copyBtn.className = "btn btn-primary";
             copyBtn.textContent = "Copy";
+            copyBtn.setAttribute("data-short", shorturl);
+
+            copyBtn.addEventListener("click", (e) => {
+              if (e.target.dataset.short) {
+                const url = `http://localhost:6003/urls/${e.target.dataset.short}`;
+                navigator.clipboard.writeText(url);
+              }
+            });
 
             const btnContainer = document.createElement("div");
             btnContainer.className = "btnContainer";
             btnContainer.append(deletebtn, editBtn, copyBtn);
 
-            urlText.textContent = `URL: ${url}`;
-            short.textContent = `shortURL: ${shorturl}`;
+            urlText.textContent = ` ${url}`;
+            short.textContent = ` ${shorturl}`;
             urlCard.append(url, short, btnContainer);
             urlList.appendChild(urlCard);
           }
@@ -93,7 +95,6 @@
         });
 
       const deletebtn = document.querySelector(".delete");
-      console.log(deletebtn);
     </script>
   </body>
 </html>

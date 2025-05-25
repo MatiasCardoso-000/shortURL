@@ -27,6 +27,19 @@ const create = async ({ origin, shortURL }) => {
   return rows[0];
 };
 
+const findOne = async (shortURL) => {
+  const query = {
+    text: `
+      SELECT FROM URLS
+      WHERE shorturl = $3
+      RETURNING SHORTURL
+      `,
+    values: [shortURL],
+  };
+  const { rows } = await db.query(query);
+  return rows[0];
+};
+
 const findOneById = async (uid) => {
   const query = {
     text: `
@@ -39,15 +52,15 @@ const findOneById = async (uid) => {
   return rows[0];
 };
 
-const updateOneById = async (origin) => {
+const updateOneById = async (uid, newUrl) => {
   const query = {
     text: `
       UPDATE URLS
-      SET url = url
-      WHERE url = $2
+      SET url = $2
+      WHERE uid = $1
       RETURNING url
     `,
-    values: [origin],
+    values: [uid, newUrl],
   };
 
   const { rows } = await db.query(query);
@@ -71,6 +84,7 @@ export const UrlModel = {
   find,
   create,
   findOneById,
+  findOne,
   updateOneById,
   deleteById,
 };
